@@ -15,8 +15,8 @@ from scheduler import start_scheduler, stop_scheduler
 
 app = FastAPI(
     title="부산시의회 타시도 조례 모니터링 API",
-    version="1.0.0",
-    description="부산광역시의회 입법정책 지원 및 타 지자체 조례 모니터링 & 입법 Gap 분석 시스템 API"
+    version="2.0.0",
+    description="부산광역시의회 입법정책 지원 및 타 지자체 조례 모니터링 & 입법 Gap 분석 시스템 API v2.0"
 )
 
 # CORS 설정

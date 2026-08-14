@@ -29,8 +29,8 @@ export default function Header({ stats, activeTab, setActiveTab, onOpenSyncModal
                 <span className="bg-blue-500/20 text-blue-300 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-blue-400/30">
                   부산광역시의회 입법정책 지원
                 </span>
-                <span className="text-slate-400 text-xs hidden sm:inline">
-                  자동 배치 시스템 v1.0
+                <span className="text-emerald-400 font-semibold text-xs hidden sm:inline bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  자동 배치 시스템 v2.0
                 </span>
               </div>
               <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2 mt-0.5">
