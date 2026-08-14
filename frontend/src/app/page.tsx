@@ -197,7 +197,7 @@ export default function Home() {
     }
 
     setIsLoading(false);
-  }, [filters, allOrdinances]);
+  }, [filters]);
 
   // Fetch Workspace items
   const fetchWorkspaceItems = useCallback(async () => {
@@ -215,7 +215,7 @@ export default function Home() {
 
     // Static fallback for GitHub Pages
     const localWs = getLocalWorkspace();
-    const itemsToFilter = allOrdinances.length > 0 ? allOrdinances : ordinances;
+    const itemsToFilter = allOrdinances;
     const ws = itemsToFilter.map(item => {
       if (localWs[item.id]) {
         return {
@@ -229,7 +229,7 @@ export default function Home() {
     }).filter(item => item.is_scrapped === 1 || (item.memo && item.memo.trim() !== ''));
 
     setWorkspaceItems(ws);
-  }, [allOrdinances, ordinances]);
+  }, [allOrdinances]);
 
   useEffect(() => {
     fetchStats();
