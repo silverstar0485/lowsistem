@@ -72,7 +72,10 @@ export default function Home() {
   // Fetch Dashboard Stats
   const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch('/api/stats');
+      let res = await fetch('/api/stats');
+      if (!res.ok) {
+        res = await fetch('http://127.0.0.1:8000/api/stats');
+      }
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -80,7 +83,7 @@ export default function Home() {
       }
     } catch {}
 
-    // Fallback to static JSON data for GitHub Pages
+    // Fallback to static JSON data for GitHub Pages / Offline
     try {
       const res = await fetch(`${basePath}/data/stats.json`);
       if (res.ok) {
@@ -92,12 +95,12 @@ export default function Home() {
     }
   }, []);
 
-  // Fetch Ordinances list (Supports both live API and static GitHub Pages export)
+  // Fetch Ordinances list (Supports direct FastAPI & static JSON fallback)
   const fetchOrdinances = useCallback(async () => {
     setIsLoading(true);
-    let rawItems: Ordinance[] = [];
-    let isLiveApi = false;
+    let isSuccess = false;
 
+    // 1. Try Live FastAPI server API first
     try {
       const params = new URLSearchParams();
       filters.regions.forEach(r => params.append('regions', r));
@@ -116,29 +119,32 @@ export default function Home() {
       params.append('page', filters.page.toString());
       params.append('limit', filters.limit.toString());
 
-      const res = await fetch(`/api/ordinances?${params.toString()}`);
+      let res = await fetch(`/api/ordinances?${params.toString()}`);
+      if (!res.ok) {
+        res = await fetch(`http://127.0.0.1:8000/api/ordinances?${params.toString()}`);
+      }
+
       if (res.ok) {
         const data = await res.json();
         setOrdinances(data.items || []);
         setTotalCount(data.total || 0);
         setTotalPages(data.total_pages || 1);
-        setIsLoading(false);
-        isLiveApi = true;
-        return;
+        isSuccess = true;
       }
-    } catch {}
+    } catch (e) {
+      console.warn('Live API fetch skipped:', e);
+    }
 
-    // Static fallback for GitHub Pages
-    if (!isLiveApi) {
+    // 2. Static JSON Fallback for GitHub Pages or when FastAPI server is offline
+    if (!isSuccess) {
       try {
-        if (allOrdinances.length === 0) {
+        let rawItems = allOrdinances;
+        if (rawItems.length === 0) {
           const res = await fetch(`${basePath}/data/ordinances.json`);
           if (res.ok) {
             rawItems = await res.json();
             setAllOrdinances(rawItems);
           }
-        } else {
-          rawItems = allOrdinances;
         }
 
         // Merge with local storage workspace modifications
@@ -185,18 +191,21 @@ export default function Home() {
         const pageItems = result.slice(startIdx, startIdx + filters.limit);
         setOrdinances(pageItems);
 
-      } catch (e) {
-        console.error('Error fetching static data:', e);
-      } finally {
-        setIsLoading(false);
+      } catch (err) {
+        console.error('Error fetching static JSON data:', err);
       }
     }
+
+    setIsLoading(false);
   }, [filters, allOrdinances]);
 
   // Fetch Workspace items
   const fetchWorkspaceItems = useCallback(async () => {
     try {
-      const res = await fetch('/api/workspace');
+      let res = await fetch('/api/workspace');
+      if (!res.ok) {
+        res = await fetch('http://127.0.0.1:8000/api/workspace');
+      }
       if (res.ok) {
         const data = await res.json();
         setWorkspaceItems(data.items || []);
@@ -243,11 +252,18 @@ export default function Home() {
     }
 
     try {
-      const res = await fetch('/api/scraps', {
+      let res = await fetch('/api/scraps', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ordinance_id: ordId })
       });
+      if (!res.ok) {
+        res = await fetch('http://127.0.0.1:8000/api/scraps', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ordinance_id: ordId })
+        });
+      }
       if (res.ok) {
         const data = await res.json();
         newScrapState = data.is_scrapped;
@@ -275,12 +291,18 @@ export default function Home() {
   // Save Memo
   const handleSaveMemo = async (ordId: number, memo: string, status: string) => {
     try {
-      const res = await fetch(`/api/memos/${ordId}`, {
+      let res = await fetch(`/api/memos/${ordId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ memo, review_status: status })
       });
-      if (res.ok) {}
+      if (!res.ok) {
+        res = await fetch(`http://127.0.0.1:8000/api/memos/${ordId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ memo, review_status: status })
+        });
+      }
     } catch {}
 
     // LocalStorage fallback for static host
@@ -305,7 +327,10 @@ export default function Home() {
   const handleTriggerSync = async () => {
     setIsSyncing(true);
     try {
-      const res = await fetch('/api/sync/trigger', { method: 'POST' });
+      let res = await fetch('/api/sync/trigger', { method: 'POST' });
+      if (!res.ok) {
+        res = await fetch('http://127.0.0.1:8000/api/sync/trigger', { method: 'POST' });
+      }
       if (res.ok) {
         await fetchStats();
         await fetchOrdinances();
