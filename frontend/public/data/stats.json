@@ -1,0 +1,91 @@
+{
+  "total_ordinances": 115,
+  "newly_enacted": 92,
+  "busan_unenacted": 115,
+  "scrapped_count": 13,
+  "region_stats": [
+    {
+      "org_name": "인천광역시",
+      "count": 8
+    },
+    {
+      "org_name": "서울특별시",
+      "count": 8
+    },
+    {
+      "org_name": "경기도",
+      "count": 8
+    },
+    {
+      "org_name": "충청북도",
+      "count": 7
+    },
+    {
+      "org_name": "충청남도",
+      "count": 7
+    },
+    {
+      "org_name": "제주특별자치도",
+      "count": 7
+    },
+    {
+      "org_name": "전북특별자치도",
+      "count": 7
+    },
+    {
+      "org_name": "전라남도",
+      "count": 7
+    },
+    {
+      "org_name": "울산광역시",
+      "count": 7
+    },
+    {
+      "org_name": "세종특별자치시",
+      "count": 7
+    },
+    {
+      "org_name": "대전광역시",
+      "count": 7
+    },
+    {
+      "org_name": "대구광역시",
+      "count": 7
+    },
+    {
+      "org_name": "광주광역시",
+      "count": 7
+    },
+    {
+      "org_name": "경상북도",
+      "count": 7
+    },
+    {
+      "org_name": "경상남도",
+      "count": 7
+    },
+    {
+      "org_name": "강원특별자치도",
+      "count": 7
+    }
+  ],
+  "change_type_stats": [
+    {
+      "change_type": "제정",
+      "count": 92
+    },
+    {
+      "change_type": "일부개정",
+      "count": 15
+    },
+    {
+      "change_type": "전부개정",
+      "count": 8
+    }
+  ],
+  "last_sync": {
+    "sync_date": "2026-08-14 05:42:26",
+    "status": "SUCCESS",
+    "message": "최초 시드 데이터 115건 수집 및 부산시 조례 Gap 분석 완료"
+  }
+}
