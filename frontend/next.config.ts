@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/lowsistem";
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   basePath: basePath,
-  assetPrefix: basePath ? `${basePath}/` : undefined,
+  assetPrefix: `${basePath}/`,
   trailingSlash: true,
 };
 
